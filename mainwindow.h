@@ -26,10 +26,14 @@ public:
 
 private slots:
     void on_pushButtonOpen_clicked();
+    void on_pushButtonUpdateKey_clicked();
 
 private:
     Ui::MainWindow *ui;
     QString calculateHash(const QString &amount, const QString &wallet, const QString &date, const QString &previousHash);
+    QByteArray decryptFile(const QString &filePath, const QString &key);
+
+    QString decryptionKey; // Переменная для хранения ключа расшифровки
 };
 
 #endif // MAINWINDOW_H

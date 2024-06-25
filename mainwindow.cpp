@@ -9,6 +9,8 @@
 #include <QTextCharFormat>
 #include <QColor>
 #include <QFileDialog>
+#include <openssl/aes.h>
+#include <openssl/rand.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,8 +21,11 @@ MainWindow::MainWindow(QWidget *parent)
     // Загружаем транзакции из файла при старте приложения
     loadTransactionsFromFile("C:\\Users\\Sema\\Desktop\\221_329_Volkov\\transactions.csv");
 
-    // Подключаем кнопку "Открыть" к слоту
+    // Подключаем кнопки к слотам
     connect(ui->pushButtonOpen, &QPushButton::clicked, this, &MainWindow::on_pushButtonOpen_clicked);
+    connect(ui->pushButtonUpdateKey, &QPushButton::clicked, this, &MainWindow::on_pushButtonUpdateKey_clicked);
+
+    decryptionKey = ""; // Изначально ключ пустой
 }
 
 MainWindow::~MainWindow()
@@ -53,18 +58,14 @@ QString MainWindow::calculateHash(const QString &amount, const QString &wallet, 
 
 void MainWindow::loadTransactionsFromFile(const QString &filePath)
 {
-    QFile file(filePath);
-    if (!file.exists()) {
-        QMessageBox::warning(this, "Ошибка", "Файл не существует: " + filePath);
+    QByteArray decryptedData = decryptFile(filePath, decryptionKey);
+    if (decryptedData.isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось расшифровать файл с транзакциями: " + filePath);
         return;
     }
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл с транзакциями: " + filePath);
-        return;
-    }
-
-    QTextStream in(&file);
+    QString decryptedString = QString::fromUtf8(decryptedData);
+    QTextStream in(&decryptedString);
     QString previousHash;
     int lineNumber = 0;
     bool highlight = false;
@@ -102,14 +103,61 @@ void MainWindow::loadTransactionsFromFile(const QString &filePath)
         addTransaction(line, highlight);
         previousHash = hash;
     }
-
-    file.close();
 }
+
+
+QByteArray MainWindow::decryptFile(const QString &filePath, const QString &key)
+{
+    if (key.isEmpty() || key.length() != 64) {
+        QMessageBox::warning(this, "Ошибка", "Неверный ключ для расшифровки. Длина ключа должна быть 64 символа.");
+        return QByteArray();
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return QByteArray();
+    }
+
+    QByteArray encryptedData = file.readAll();
+    file.close();
+
+    AES_KEY decryptKey;
+    unsigned char iv[AES_BLOCK_SIZE];
+    memset(iv, 0x00, AES_BLOCK_SIZE);
+
+    if (AES_set_decrypt_key(reinterpret_cast<const unsigned char*>(key.toStdString().c_str()), 256, &decryptKey) < 0) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось установить ключ для расшифровки.");
+        return QByteArray();
+    }
+
+    QByteArray decryptedData;
+    decryptedData.resize(encryptedData.size());
+
+    AES_cbc_encrypt(reinterpret_cast<const unsigned char*>(encryptedData.constData()),
+                    reinterpret_cast<unsigned char*>(decryptedData.data()),
+                    encryptedData.size(),
+                    &decryptKey,
+                    iv,
+                    AES_DECRYPT);
+
+    // Убираем padding
+    int paddingLength = decryptedData[decryptedData.size() - 1];
+    decryptedData.chop(paddingLength);
+
+    return decryptedData;
+}
+
 
 void MainWindow::on_pushButtonOpen_clicked()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "Открыть файл", "", "CSV Files (*.csv);;All Files (*)");
+    QString filePath = QFileDialog::getOpenFileName(this, "Открыть файл", "", "Encrypted Files (*.enc);;All Files (*)");
     if (!filePath.isEmpty()) {
         loadTransactionsFromFile(filePath);
     }
+}
+
+void MainWindow::on_pushButtonUpdateKey_clicked()
+{
+    decryptionKey = ui->lineEditKey->text();
+    QMessageBox::information(this, "Ключ обновлен", "Ключ для расшифровки обновлен.");
 }

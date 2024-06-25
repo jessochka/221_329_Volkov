@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPlainTextEdit>
@@ -28,6 +29,8 @@ public:
     QVBoxLayout *verticalLayout;
     QPlainTextEdit *plainTextEditTransactions;
     QPushButton *pushButtonOpen;
+    QPushButton *pushButtonUpdateKey;
+    QLineEdit *lineEditKey;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -50,6 +53,16 @@ public:
 
         verticalLayout->addWidget(pushButtonOpen);
 
+        pushButtonUpdateKey = new QPushButton(centralwidget);
+        pushButtonUpdateKey->setObjectName("pushButtonUpdateKey");
+
+        verticalLayout->addWidget(pushButtonUpdateKey);
+
+        lineEditKey = new QLineEdit(centralwidget);
+        lineEditKey->setObjectName("lineEditKey");
+
+        verticalLayout->addWidget(lineEditKey);
+
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -68,6 +81,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         pushButtonOpen->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214", nullptr));
+        pushButtonUpdateKey->setText(QCoreApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\272\320\273\321\216\321\207", nullptr));
     } // retranslateUi
 
 };

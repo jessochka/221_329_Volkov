@@ -25,6 +25,16 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QPushButton" name="pushButtonUpdateKey">
+      <property name="text">
+       <string>Добавить ключ</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEditKey"/>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">

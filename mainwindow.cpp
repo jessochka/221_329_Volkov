@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButtonUpdateKey, &QPushButton::clicked, this, &MainWindow::on_pushButtonUpdateKey_clicked);
 
     decryptionKey = ""; // Изначально ключ пустой
+    iv = QByteArray::fromHex("5062c5972a7b9d71aaef87ea31451c22"); // Инициализация IV
 }
 
 MainWindow::~MainWindow()
@@ -122,31 +123,26 @@ QByteArray MainWindow::decryptFile(const QString &filePath, const QString &key)
     file.close();
 
     AES_KEY decryptKey;
-    unsigned char iv[AES_BLOCK_SIZE];
-    memset(iv, 0x00, AES_BLOCK_SIZE);
-
-    if (AES_set_decrypt_key(reinterpret_cast<const unsigned char*>(key.toStdString().c_str()), 256, &decryptKey) < 0) {
+    QByteArray keyBytes = QByteArray::fromHex(key.toUtf8());
+    if (AES_set_decrypt_key(reinterpret_cast<const unsigned char*>(keyBytes.constData()), 256, &decryptKey) < 0) {
         QMessageBox::warning(this, "Ошибка", "Не удалось установить ключ для расшифровки.");
         return QByteArray();
     }
 
-    QByteArray decryptedData;
-    decryptedData.resize(encryptedData.size());
-
+    QByteArray decryptedData(encryptedData.size(), 0);
     AES_cbc_encrypt(reinterpret_cast<const unsigned char*>(encryptedData.constData()),
                     reinterpret_cast<unsigned char*>(decryptedData.data()),
                     encryptedData.size(),
                     &decryptKey,
-                    iv,
+                    reinterpret_cast<unsigned char*>(iv.data()),
                     AES_DECRYPT);
 
     // Убираем padding
-    int paddingLength = decryptedData[decryptedData.size() - 1];
+    int paddingLength = decryptedData.at(decryptedData.size() - 1);
     decryptedData.chop(paddingLength);
 
     return decryptedData;
 }
-
 
 void MainWindow::on_pushButtonOpen_clicked()
 {

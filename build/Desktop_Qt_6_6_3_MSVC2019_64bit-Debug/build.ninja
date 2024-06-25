@@ -84,10 +84,10 @@ build CMakeFiles\221_329_Volkov.dir\mainwindow.cpp.obj: CXX_COMPILER__221_329_Vo
 #############################################
 # Link the executable 221_329_Volkov.exe
 
-build 221_329_Volkov.exe: CXX_EXECUTABLE_LINKER__221_329_Volkov_Debug CMakeFiles\221_329_Volkov.dir\221_329_Volkov_autogen\mocs_compilation.cpp.obj CMakeFiles\221_329_Volkov.dir\main.cpp.obj CMakeFiles\221_329_Volkov.dir\mainwindow.cpp.obj | C$:\Qt\6.6.3\msvc2019_64\lib\Qt6Widgetsd.lib C$:\Qt\Tools\OpenSSLv3\Win_x64\lib\libcrypto.lib C$:\Qt\6.6.3\msvc2019_64\lib\Qt6Guid.lib C$:\Qt\6.6.3\msvc2019_64\lib\Qt6Cored.lib C$:\Qt\6.6.3\msvc2019_64\lib\Qt6EntryPointd.lib || 221_329_Volkov_autogen 221_329_Volkov_autogen_timestamp_deps
+build 221_329_Volkov.exe: CXX_EXECUTABLE_LINKER__221_329_Volkov_Debug CMakeFiles\221_329_Volkov.dir\221_329_Volkov_autogen\mocs_compilation.cpp.obj CMakeFiles\221_329_Volkov.dir\main.cpp.obj CMakeFiles\221_329_Volkov.dir\mainwindow.cpp.obj | C$:\Qt\6.6.3\msvc2019_64\lib\Qt6Widgetsd.lib C$:\Qt\Tools\OpenSSLv3\Win_x64\lib\libcrypto.lib C$:\Qt\Tools\OpenSSLv3\Win_x64\lib\libssl.lib C$:\Qt\6.6.3\msvc2019_64\lib\Qt6Guid.lib C$:\Qt\6.6.3\msvc2019_64\lib\Qt6Cored.lib C$:\Qt\6.6.3\msvc2019_64\lib\Qt6EntryPointd.lib || 221_329_Volkov_autogen 221_329_Volkov_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:windows
-  LINK_LIBRARIES = C:\Qt\6.6.3\msvc2019_64\lib\Qt6Widgetsd.lib  C:\Qt\Tools\OpenSSLv3\Win_x64\lib\libcrypto.lib  C:\Qt\6.6.3\msvc2019_64\lib\Qt6Guid.lib  C:\Qt\6.6.3\msvc2019_64\lib\Qt6Cored.lib  mpr.lib  userenv.lib  C:\Qt\6.6.3\msvc2019_64\lib\Qt6EntryPointd.lib  shell32.lib  d3d11.lib  dxgi.lib  dxguid.lib  d3d12.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_LIBRARIES = C:\Qt\6.6.3\msvc2019_64\lib\Qt6Widgetsd.lib  C:\Qt\Tools\OpenSSLv3\Win_x64\lib\libcrypto.lib  C:\Qt\Tools\OpenSSLv3\Win_x64\lib\libssl.lib  C:\Qt\6.6.3\msvc2019_64\lib\Qt6Guid.lib  C:\Qt\6.6.3\msvc2019_64\lib\Qt6Cored.lib  mpr.lib  userenv.lib  C:\Qt\6.6.3\msvc2019_64\lib\Qt6EntryPointd.lib  shell32.lib  d3d11.lib  dxgi.lib  dxguid.lib  d3d12.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = CMakeFiles\221_329_Volkov.dir
   POST_BUILD = cd .
   PRE_LINK = cd .

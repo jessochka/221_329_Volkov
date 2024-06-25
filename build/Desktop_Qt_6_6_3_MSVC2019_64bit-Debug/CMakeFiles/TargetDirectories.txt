@@ -1,0 +1,8 @@
+C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/CMakeFiles/221_329_Volkov.dir
+C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/CMakeFiles/list_install_components.dir
+C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/CMakeFiles/install.dir
+C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/CMakeFiles/install/local.dir
+C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/CMakeFiles/221_329_Volkov_autogen_timestamp_deps.dir
+C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/CMakeFiles/221_329_Volkov_autogen.dir

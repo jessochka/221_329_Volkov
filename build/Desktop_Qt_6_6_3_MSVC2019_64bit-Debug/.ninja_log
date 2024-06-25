@@ -1,0 +1,11 @@
+# ninja log v5
+5	495	7410115764922149	221_329_Volkov_autogen/timestamp	62bf0f971cd99134
+506	2990	7410115785232177	CMakeFiles/221_329_Volkov.dir/main.cpp.obj	b42a5c17c132c15f
+51	72	0	clean	ef1b363c3316a1b2
+5	495	7410115764922149	221_329_Volkov_autogen/mocs_compilation.cpp	62bf0f971cd99134
+5	495	7410115764922149	C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/221_329_Volkov_autogen/timestamp	62bf0f971cd99134
+5	495	7410115764922149	C:/Users/Sema/Desktop/221_329_Volkov/build/Desktop_Qt_6_6_3_MSVC2019_64bit-Debug/221_329_Volkov_autogen/mocs_compilation.cpp	62bf0f971cd99134
+498	2998	7410115785232177	CMakeFiles/221_329_Volkov.dir/221_329_Volkov_autogen/mocs_compilation.cpp.obj	a3fd7300a7cac2d9
+511	2994	7410115785364469	CMakeFiles/221_329_Volkov.dir/mainwindow.cpp.obj	6a2655b1f6d2557d
+2998	3306	7410115787548300	221_329_Volkov.exe	6b44f6bfe020bf30
+1	50	0	CMakeFiles/clean.additional	baedbe210acaa455

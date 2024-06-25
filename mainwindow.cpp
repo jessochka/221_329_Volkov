@@ -18,12 +18,16 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Загружаем транзакции из файла при старте приложения
-    loadTransactionsFromFile("C:\\Users\\Sema\\Desktop\\221_329_Volkov\\transactions.csv");
-
     // Подключаем кнопки к слотам
     connect(ui->pushButtonOpen, &QPushButton::clicked, this, &MainWindow::on_pushButtonOpen_clicked);
     connect(ui->pushButtonUpdateKey, &QPushButton::clicked, this, &MainWindow::on_pushButtonUpdateKey_clicked);
+    connect(ui->pushButtonAddTransaction, &QPushButton::clicked, this, &MainWindow::on_pushButtonAddTransaction_clicked);
+    connect(ui->pushButtonSave, &QPushButton::clicked, this, &MainWindow::on_pushButtonSave_clicked);
+
+    // Подключаем поля ввода к функции проверки
+    connect(ui->lineEditAmount, &QLineEdit::textChanged, this, &MainWindow::validateInput);
+    connect(ui->lineEditWallet, &QLineEdit::textChanged, this, &MainWindow::validateInput);
+    connect(ui->lineEditDate, &QLineEdit::textChanged, this, &MainWindow::validateInput);
 
     decryptionKey = ""; // Изначально ключ пустой
     iv = QByteArray::fromHex("5062c5972a7b9d71aaef87ea31451c22"); // Инициализация IV
@@ -32,6 +36,23 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::validateInput()
+{
+    ui->pushButtonSave->setEnabled(validateFields());
+}
+
+bool MainWindow::validateFields()
+{
+    // Пример проверки. Вы можете добавить дополнительные проверки
+    if (ui->lineEditAmount->text().isEmpty() ||
+        ui->lineEditWallet->text().isEmpty() ||
+        ui->lineEditDate->text().isEmpty()) {
+        return false;
+    }
+    // Дополнительные проверки на формат данных
+    return true;
 }
 
 void MainWindow::addTransaction(const QString &transaction, bool highlight)
@@ -157,4 +178,78 @@ void MainWindow::on_pushButtonUpdateKey_clicked()
 {
     decryptionKey = ui->lineEditKey->text();
     QMessageBox::information(this, "Ключ обновлен", "Ключ для расшифровки обновлен.");
+}
+
+void MainWindow::on_pushButtonAddTransaction_clicked()
+{
+    QString amount = ui->lineEditAmount->text();
+    QString wallet = ui->lineEditWallet->text();
+    QString date = ui->lineEditDate->text();
+
+    QString previousHash = ""; // Нужно получить предыдущий хэш из списка транзакций
+    QString hash = calculateHash(amount, wallet, date, previousHash);
+
+    QString transaction = amount + "," + wallet + "," + date + "," + hash;
+    addTransaction(transaction);
+}
+
+void MainWindow::on_pushButtonSave_clicked()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, "Сохранить файл", "", "Encrypted Files (*.enc);;All Files (*)");
+    if (!filePath.isEmpty()) {
+        saveTransactionsToFile(filePath);
+    }
+}
+
+void MainWindow::saveTransactionsToFile(const QString &filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл для записи: " + filePath);
+        return;
+    }
+
+    QByteArray data;
+    QTextStream out(&data);
+    out << ui->plainTextEditTransactions->toPlainText();
+    out.flush();
+
+    QByteArray encryptedData = encryptFile(data, decryptionKey);
+    if (encryptedData.isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось зашифровать данные.");
+        return;
+    }
+
+    file.write(encryptedData);
+    file.close();
+}
+
+QByteArray MainWindow::encryptFile(const QByteArray &data, const QString &key)
+{
+    if (key.isEmpty() || key.length() != 64) {
+        QMessageBox::warning(this, "Ошибка", "Неверный ключ для шифрования. Длина ключа должна быть 64 символа.");
+        return QByteArray();
+    }
+
+    AES_KEY encryptKey;
+    QByteArray keyBytes = QByteArray::fromHex(key.toUtf8());
+    if (AES_set_encrypt_key(reinterpret_cast<const unsigned char*>(keyBytes.constData()), 256, &encryptKey) < 0) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось установить ключ для шифрования.");
+        return QByteArray();
+    }
+
+    QByteArray ivCopy = iv; // Сброс IV перед каждым новым шифрованием
+
+    QByteArray encryptedData(data.size() + AES_BLOCK_SIZE, 0);
+    int encryptedSize = 0;
+
+    AES_cbc_encrypt(reinterpret_cast<const unsigned char*>(data.constData()),
+                    reinterpret_cast<unsigned char*>(encryptedData.data()),
+                    data.size(),
+                    &encryptKey,
+                    reinterpret_cast<unsigned char*>(ivCopy.data()),
+                    AES_ENCRYPT);
+
+    encryptedData.resize(encryptedSize);
+    return encryptedData;
 }

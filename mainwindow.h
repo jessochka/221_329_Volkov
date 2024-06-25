@@ -26,12 +26,18 @@ public:
 private slots:
     void on_pushButtonOpen_clicked();
     void on_pushButtonUpdateKey_clicked();
+    void on_pushButtonAddTransaction_clicked();
+    void on_pushButtonSave_clicked();
+    void validateInput();
 
 private:
-    Ui::MainWindow *ui;
-    QString calculateHash(const QString &amount, const QString &wallet, const QString &date, const QString &previousHash);
+    bool validateFields();
+    void saveTransactionsToFile(const QString &filePath);
+    QByteArray encryptFile(const QByteArray &data, const QString &key);
     QByteArray decryptFile(const QString &filePath, const QString &key);
+    QString calculateHash(const QString &amount, const QString &wallet, const QString &date, const QString &previousHash);
 
+    Ui::MainWindow *ui;
     QString decryptionKey;
     QByteArray iv;
 };

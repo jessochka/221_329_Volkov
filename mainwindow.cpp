@@ -106,7 +106,6 @@ void MainWindow::loadTransactionsFromFile(const QString &filePath)
     }
 }
 
-
 QByteArray MainWindow::decryptFile(const QString &filePath, const QString &key)
 {
     if (key.isEmpty() || key.length() != 64) {
@@ -129,12 +128,14 @@ QByteArray MainWindow::decryptFile(const QString &filePath, const QString &key)
         return QByteArray();
     }
 
+    QByteArray ivCopy = iv; // Сброс IV перед каждым новым расшифрованием
+
     QByteArray decryptedData(encryptedData.size(), 0);
     AES_cbc_encrypt(reinterpret_cast<const unsigned char*>(encryptedData.constData()),
                     reinterpret_cast<unsigned char*>(decryptedData.data()),
                     encryptedData.size(),
                     &decryptKey,
-                    reinterpret_cast<unsigned char*>(iv.data()),
+                    reinterpret_cast<unsigned char*>(ivCopy.data()),
                     AES_DECRYPT);
 
     // Убираем padding

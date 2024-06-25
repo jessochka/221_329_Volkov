@@ -29,10 +29,11 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QString decryptionKey;
-    QByteArray iv;  // Добавляем поле для IV
     QString calculateHash(const QString &amount, const QString &wallet, const QString &date, const QString &previousHash);
     QByteArray decryptFile(const QString &filePath, const QString &key);
+
+    QString decryptionKey;
+    QByteArray iv;
 };
 
 #endif // MAINWINDOW_H
